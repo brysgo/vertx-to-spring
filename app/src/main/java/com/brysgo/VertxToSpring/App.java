@@ -76,7 +76,7 @@ public class App {
                     parser.setEnvironment(null, null, null, true);
                     CompilationUnit cu = (CompilationUnit) parser.createAST(null);
 
-                    // ConvertVerticlesToSpringComponentsCodemod.install(cu);
+                    ConvertVerticlesToSpringComponentsCodemod.install(cu);
                     ConvertEventLoopsToSpringBootCodemod.install(cu);
                     if (writeValue) {
                         // overwrite the file
