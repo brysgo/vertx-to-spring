@@ -3,12 +3,56 @@
  */
 package com.brysgo.VertxToSpring;
 
+import java.io.File;
+import java.io.IOException;
+import java.nio.charset.StandardCharsets;
+import java.nio.file.Files;
+import java.util.Arrays;
+
+import org.eclipse.jdt.core.dom.AST;
+import org.eclipse.jdt.core.dom.ASTParser;
+import org.eclipse.jdt.core.dom.CompilationUnit;
+
 public class App {
-    public String getGreeting() {
-        return "Hello World!";
-    }
 
     public static void main(String[] args) {
-        System.out.println(new App().getGreeting());
+        if (args.length != 1) {
+            System.err.println("Usage: PrintJavaFiles <path-to-directory>");
+            System.exit(1);
+        }
+
+        String directoryPath = args[0];
+        File directory = new File(directoryPath);
+
+        if (!directory.isDirectory()) {
+            System.err.println("Error: specified path is not a directory.");
+            System.exit(1);
     }
+
+    File[] files = directory.listFiles();
+    Arrays.sort(files);
+
+    for (File file : files) {
+        if (file.isDirectory()) {
+            // Recursively print files in subdirectories
+            String[] subdirectoryArgs = { file.getAbsolutePath() };
+            main(subdirectoryArgs);
+        } else if (file.getName().endsWith(".java")) {
+            // Parse and print contents of Java files
+            try {
+                String code = Files.readString(file.toPath(), StandardCharsets.UTF_8);
+                ASTParser parser = ASTParser.newParser(AST.getJLSLatest());
+                parser.setSource(code.toCharArray());
+                parser.setKind(ASTParser.K_COMPILATION_UNIT);
+                CompilationUnit cu = (CompilationUnit) parser.createAST(null);
+                ConvertVerticlesToSpringComponentsCodemod.install(cu);
+                System.out.println("File: " + file.getName());
+                System.out.println(cu.toString());
+                System.out.println();
+            } catch (IOException e) {
+                System.err.println("Error reading file: " + file.getName());
+            }
+        }
+    }
+}
 }

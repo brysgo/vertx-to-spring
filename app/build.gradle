@@ -22,10 +22,10 @@ dependencies {
 
     // This dependency is used by the application.
     implementation 'com.google.guava:guava:31.1-jre'
-    implementation 'org.eclipse.tycho:org.eclipse.jdt.core:3.14.0.v20171206-0802'
+    implementation 'org.eclipse.jdt:org.eclipse.jdt.core:3.32.0'
 }
 
 application {
     // Define the main class for the application.
-    mainClass = 'com.brysgo.VertxToSpring.ConvertVerticlesToSpringComponentsCodemod'
+    mainClass = 'com.brysgo.VertxToSpring.App'
 }
