@@ -24,13 +24,11 @@ public class ConvertVerticlesToSpringComponentsCodemod {
                     MarkerAnnotation componentAnnotation = ast.newMarkerAnnotation();
                     componentAnnotation.setTypeName(ast.newSimpleName("Component"));
                     td.modifiers().add(componentAnnotation);
-                    // System.out.println(markerAnnotations);
                     ImportDeclaration componentImport = ast.newImportDeclaration();
 
                     Name componentImportName = ast.newName("org.springframework.stereotype.Component");
                     componentImport.setName(componentImportName);
                     cu.imports().add(componentImport);
-                    // System.out.println(importDeclarations);
                 }
                 return true;
             }
